@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Number Spinner</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="inventory">
+            <h3>Инвентарь</h3>
+            <ul id="inventory-list">
+                <!-- Список инвентаря -->
+            </ul>
+        </div>
+        <div>
+            <button id="openCaseButton" onclick="generateNumber()">Открыть кейс</button>
+            <button onclick="generateNumberFast()">Открыть быстро</button>
+            <div class="spinner" id="spinner">
+                <div class="numbers" id="numbers">
+                    <!-- Numbers will be dynamically generated here -->
+                </div>
+                <div class="highlight"></div>
+            </div>
+            <div class="balance" id="balance">Баланс: $400</div>
+
+            <div id="action-buttons" class="action-buttons">
+                <button onclick="sellInventoryNumber(lastGeneratedNumber)">Продать</button>
+
+                <button onclick="addToInventory()">Положить в инвентарь</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        let balance = 400;
+        let lastGeneratedNumber = null;
+        let inventory = [];
+        let canOpenCase = true; // Флаг для проверки, можно ли открыть кейс
+        let availableNumbers = []; // Массив доступных чисел
+    
+        function updateBalance() {
+            const balanceElement = document.getElementById('balance');
+            balanceElement.textContent = `Баланс: $${balance}`;
+        }
+    
+        function generateNumber() {
+            if (balance >= 100 && canOpenCase) {
+                balance -= 100;
+                canOpenCase = false; // Блокируем возможность открытия кейса
+                updateBalance();
+                document.getElementById('openCaseButton').disabled = true; // Блокируем кнопку открытия кейса
+                spinWheel(3.5);
+            } else if (!canOpenCase) {
+                alert("Вы должны выбрать действие с числом перед тем, как открыть кейс.");
+            } else {
+                alert("Недостаточно средств на балансе!");
+            }
+        }
+    
+        function generateNumberFast() {
+            if (balance >= 100 && canOpenCase) {
+                balance -= 100;
+                canOpenCase = false;
+                updateBalance();
+                document.getElementById('openCaseButton').disabled = true; // Блокируем кнопку открытия кейса
+                spinWheel(1);
+            } else if (!canOpenCase) {
+                alert("Вы должны выбрать действие с числом перед тем, как открыть кейс.");
+            } else {
+                alert("Недостаточно средств на балансе!");
+            }
+        }
+    
+        function spinWheel(duration) {
+            const minVisible = 1;    // Минимальное отображаемое число
+            const maxVisible = 106;  // Максимальное отображаемое число
+            const minPlayable = 34;  // Минимальное число, которое может выпасть
+            const maxPlayable = 99;  // Максимальное число, которое может выпасть
+            const spinner = document.getElementById('spinner');
+            const numbersContainer = document.getElementById('numbers');
+    
+            numbersContainer.innerHTML = '';
+    
+            const numberWidth = 60;
+            const spinnerWidth = spinner.offsetWidth;
+            const centerOffset = (spinnerWidth / 2) - (numberWidth / 2);
+    
+            // Массив всех чисел от 1 до 106
+            let allNumbers = [];
+            for (let i = minVisible; i <= maxVisible; i++) {
+                allNumbers.push(i);
+            }
+    
+            // Числа от 34 до 99 перемешиваются в случайном порядке
+            let playableNumbers = [];
+            for (let i = minPlayable; i <= maxPlayable; i++) {
+                playableNumbers.push(i);
+            }
+    
+            // Объединяем массивы (сначала "недоступные" числа, потом перемешанные доступные)
+            let sortedNumbers = [...allNumbers];
+            for (let i = 0; i < playableNumbers.length; i++) {
+                sortedNumbers[minPlayable - 1 + i] = playableNumbers[i];
+            }
+    
+            // Создаем элементы для всех чисел
+            sortedNumbers.forEach((number) => {
+                const numberElement = document.createElement('div');
+                numberElement.className = 'number';
+                
+                // Створюємо елемент зображення
+                const imgElement = document.createElement('img');
+                imgElement.src = `img/${number}.png`;  // Підставляємо шлях до зображення
+                imgElement.alt = `Image for ${number}`;
+                imgElement.className = 'number-image';  // Клас для стилів (за потреби)
+            
+                // Додаємо зображення до елемента
+                numberElement.appendChild(imgElement);
+            
+                // Числа від 1 до 36 і від 100 до 106 візуально виділяємо
+                if ((number >= 1 && number <= 36) || (number >= 100 && number <= 106)) {
+                    imgElement.style.filter = 'grayscale(100%)'; // Додаємо ефект затінення
+                }
+            
+                numbersContainer.appendChild(numberElement);
+            });
+            
+            const startOffset = -(10 - minVisible) * numberWidth + centerOffset;
+            numbersContainer.style.transition = 'none';
+            numbersContainer.style.transform = `translateX(${startOffset}px)`;
+    
+            setTimeout(() => {
+                // Мы убираем случайность чисел.
+                // Теперь каждое число будет выплачиваться одно за другим.
+                
+                if (availableNumbers.length === 0) {
+                    // Если доступных чисел больше нет, перезапускаем список.
+                    availableNumbers = [];
+                    for (let i = minPlayable; i <= maxPlayable; i++) {
+                        availableNumbers.push(i);
+                    }
+                    shuffleArray(availableNumbers); // Перемешиваем доступные числа
+                }
+
+                // Берем следующее доступное число из массива
+                const finalNumber = availableNumbers.pop();  // Убираем первое число из массива
+                const finalOffset = -((finalNumber - minVisible) * numberWidth) + centerOffset;
+    
+                numbersContainer.style.transition = `transform ${duration}s ease-out`;
+                numbersContainer.style.transform = `translateX(${finalOffset}px)`;
+    
+                lastGeneratedNumber = finalNumber;
+    
+                setTimeout(() => {
+    document.getElementById('action-buttons').style.display = 'block'; // Показываем кнопки после прокрута
+    document.querySelector('button[onclick="sellInventoryNumber(lastGeneratedNumber)"]').disabled = false; // Разблокируем кнопку продажи
+    document.querySelector('button[onclick="addToInventory()"]').disabled = false; // Разблокируем кнопку добавления в инвентарь
+}, duration * 1000);
+
+            }, 50);
+        }
+
+        // Функция перемешивания массива
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+    
+        function addToInventory() {
+    inventory.push(lastGeneratedNumber);
+    updateInventoryList();
+    resetAfterAction(); // Сбрасываем действия и кнопки
+}
+
+
+    
+        function sellNumber() {
+            // Применяем цены для указанных чисел
+            // Здесь ваш код для продажи
+            updateBalance();
+            resetAfterAction();
+        }
+    
+        function resetAfterAction() {
+    canOpenCase = true;
+    document.getElementById('openCaseButton').disabled = false;
+    document.getElementById('action-buttons').style.display = 'none'; // Скрываем кнопки
+    document.querySelector('button[onclick="sellInventoryNumber(lastGeneratedNumber)"]').disabled = true; // Блокируем кнопку продажи
+    document.querySelector('button[onclick="addToInventory()"]').disabled = true; // Блокируем кнопку добавления в инвентарь
+}
+
+
+    
+        function updateInventoryList() {
+            const inventoryList = document.getElementById('inventory-list');
+            inventoryList.innerHTML = '';
+        
+            inventory.forEach((number) => {
+                const listItem = document.createElement('li');
+                listItem.className = 'inventory-item';
+        
+                // Створюємо елемент зображення
+                const imgElement = document.createElement('img');
+                imgElement.src = `img/${number}.png`;  // Підставляємо шлях до зображення
+                imgElement.alt = `Image for ${number}`;
+                imgElement.className = 'inventory-image'; // Клас для стилів (за потреби)
+        
+                // Додаємо зображення до елемента списку
+                listItem.appendChild(imgElement);
+        
+                // Додаємо клікабельність для продажу
+                listItem.onclick = () => sellInventoryNumber(number);
+        
+                inventoryList.appendChild(listItem);
+            });
+        }
+
+        function sellInventoryNumber(number) {
+    let price = 0;
+
+    // Устанавливаем цены для чисел
+    if ([34, 35, 92].includes(number)) {
+        price = 767;
+    } else if ([36, 42, 55, 62, 80, 82, 86].includes(number)) {
+        price = 81;
+    } else if ([37, 39, 71, 98].includes(number)) {
+        price = 173;
+    } else if ([38, 57, 58, 60, 63, 68, 69, 72, 73, 74, 75, 76, 85, 89].includes(number)) {
+        price = 14;
+    } else if ([40, 43, 45].includes(number)) {
+        price = 555;
+    } else if ([41, 51, 53, 70, 88].includes(number)) {
+        price = 34;
+    } else if ([44, 96].includes(number)) {
+        price = 551;
+    } else if ([46, 47, 48, 49, 50, 56, 84].includes(number)) {
+        price = 101;
+    } else if ([52, 81, 87].includes(number)) {
+        price = 276;
+    } else if ([54,90, 93].includes(number)) {
+        price = 15;
+    } else if ([59,78, 91].includes(number)) {
+        price = 88;
+    } else if ([61, 65, 67].includes(number)) {
+        price = 99;
+    } else if ([64, 94].includes(number)) {
+        price = 170;
+    } else if ([83, 95].includes(number)) {
+        price = 333;
+    } else if ([66].includes(number)) {
+        price = 666;
+    } else if ([97].includes(number)) {
+        price = 2777;
+    } else if ([99].includes(number)) {
+        price = 3333;
+    } else if ([79].includes(number)) {
+        price = 1112;
+    } else if ([77].includes(number)) {
+        price = 2221;
+    }
+
+    // Проверяем, есть ли цена для числа
+    if (price > 0) {
+        // Добавляем стоимость к балансу
+        balance += price;
+
+        // Удаляем число из инвентаря
+        inventory = inventory.filter(item => item !== number);
+
+        // Обновляем интерфейс: баланс и список инвентаря
+        updateBalance();
+        updateInventoryList();
+
+        // Блокируем кнопку после продажи
+        resetAfterAction(); // Скрываем кнопки после продажи
+    } else {
+        alert("Ошибка: цена для этого числа не установлена.");
+    }
+}
+
+
+    </script>
+</body>
+</html>
