@@ -1,0 +1,269 @@
+/* Общие стили */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Выравнивание по верхнему краю */
+  height: 100vh;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(120deg, #2b2b2b, #1c1c1c);
+  color: #eaeaea;
+  flex-direction: column; /* Чтобы элементы располагались вертикально */
+}
+
+/* Стили контейнера */
+.container {
+  text-align: center;
+  background: #1e1e1e;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  width: 1200px; /* Увеличена ширина контейнера */
+  margin-top: 20px; /* Отступ сверху */
+}
+
+button {
+  padding: 20px 40px;
+  font-size: 30px;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(90deg, #ff4d4d, #ff7300);
+  border: none;
+  border-radius: 35px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(255, 115, 0, 0.6);
+}
+
+/* Стили для рулетки */
+.spinner {
+  width: 1600px; /* Увеличена ширина рулетки */
+  height: 300px; /* Увеличена высота рулетки */
+  overflow: hidden;
+  position: relative;
+  border: 3px solid #ccc;
+  box-sizing: border-box;
+  margin-top: 50px; /* Отступ от верхней части страницы */
+}
+
+.numbers {
+  display: flex;
+  position: absolute;
+  transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.number {
+  width: 250px; /* Увеличен размер числа */
+  height: 250px; /* Увеличена высота чисел */
+  text-align: center;
+  font-size: 100px; /* Увеличен размер шрифта */
+  line-height: 250px; /* Центрирование текста по вертикали */
+  font-weight: bold;
+  color: #ffcc00;
+}
+
+.container {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+}
+
+button {
+  margin-bottom: 30px;
+  padding: 20px 40px;
+  font-size: 25px;
+  border: none;
+  background: linear-gradient(to right, #ff7e5f, #feb47b);
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: linear-gradient(to right, #feb47b, #ff7e5f);
+}
+
+.spinner {
+  width: 1600px; /* Увеличена ширина рулетки */
+  height: 300px; /* Увеличена высота рулетки */
+  overflow: hidden;
+  position: relative;
+  border: 3px solid #ccc;
+  box-sizing: border-box;
+  margin-top: 50px; /* Отступ сверху */
+}
+
+.numbers {
+  display: flex;
+  transition: transform 3.5s ease-out;
+}
+
+.number {
+  width: 250px; /* Увеличена ширина чисел */
+  height: 250px; /* Увеличена высота чисел */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 100px; /* Увеличен размер шрифта */
+  border: 2px solid #ccc;
+  box-sizing: border-box;
+}
+
+.highlight {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 8px; /* Увеличена ширина полоски */
+  height: 250px; /* Высота полоски увеличена */
+  background-color: red;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #121212;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  position: relative;
+  text-align: center;
+  background: #1c1c1c;
+  padding: 20px 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  width: 800px;
+}
+
+.inventory {
+  width: 200px;
+  padding: 20px;
+  background: #333;
+  border-radius: 10px;
+  margin-right: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.inventory h3 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#inventory-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.spinner {
+  width: 360px;
+  height: 60px;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid #333;
+  border-radius: 10px;
+  margin: 20px auto;
+  background: #222;
+  box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+.numbers {
+  display: flex;
+  transition: transform 3.5s ease-out;
+}
+
+.number {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+  background: #333;
+  border-right: 1px solid #444;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.number:last-child {
+  border-right: none;
+}
+
+.highlight {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 100%;
+  background-color: #ff4747;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+button {
+  margin: 10px 5px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  background: #ff4747;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+  background: #ff6161;
+  transform: scale(1.05);
+}
+
+.balance {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #00ff00;
+}
+
+.action-buttons {
+  display: none;
+  margin-top: 20px;
+}
+
+.inventory-item {
+  cursor: pointer;
+  margin: 5px;
+  padding: 5px;
+  background: #444;
+  border-radius: 5px;
+  color: #fff;
+  text-align: center;
+}
+
+.inventory-item:hover {
+  background: #555;
+}
+.number-image {
+  width: 60px;   /* Налаштуйте розміри зображення */
+  height: 60px;
+}
+
+.inventory-image {
+  width: 40px;   /* Налаштуйте розміри зображення в інвентарі */
+  height: 40px;
+}
+
